@@ -1,6 +1,7 @@
 from colorama import init,Fore,Back,Style
-from getpass import getpass
+from prettytable import PrettyTable
 from stuff import LOGO, HOME_LOGO
+from getpass import getpass
 import requests as rq
 import platform as pf
 import time as t
@@ -256,7 +257,7 @@ while True:
 		# Checks if it was a success
 		if response.get('status') == 'success':
 			cls()
-			print('(Message was succesfully sent)')
+			print('(Mail was succesfully sent)')
 
 
 
@@ -301,13 +302,15 @@ while True:
 				continue
 
 			print(f'{Fore.RED}{Style.BRIGHT}WARNING: Mails will be DELETED once you open them{Style.RESET_ALL}\n')
-			print(f'{Back.BLACK}{Fore.WHITE}{Style.BRIGHT}S. NO{Style.RESET_ALL}    {Back.BLACK}{Fore.WHITE}{Style.BRIGHT}From{Style.RESET_ALL}    {Back.BLACK}{Fore.WHITE}{Style.BRIGHT}Header{Style.RESET_ALL}\n')
+			# myTable = PrettyTable( [f'{Style.BRIGHT}{x}{Style.RESET_ALL}' for x in ['ID','From','Header']] )
+			myTable = PrettyTable( [f'{Fore.CYAN}{x}{Style.RESET_ALL}' for x in ['ID','From','Header']] )
 
 			# Prints the data
 			msg_ids = list(msges.keys())
 			for msg_id in msges.keys():
 				dic = msges[msg_id]
-				print(f'{Back.BLACK}{Fore.WHITE}{msg_id}{Style.RESET_ALL}    {Back.BLACK}{Fore.WHITE}{dic["origin"]}{Style.RESET_ALL}    {Back.BLACK}{Fore.WHITE}{dic["header"]}{Style.RESET_ALL}')
+				myTable.add_row( [msg_id,dic['origin'],dic['header']] )
+			print(myTable)
 
 			# Gets the id of the message that the user wants to see
 			valid_msg_id = False
