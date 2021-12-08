@@ -10,7 +10,9 @@ import os
 init()
 
 # BASE_URL = 'http://127.0.0.1:5000/'
-BASE_URL = 'https://msr8.jprq.io/'
+# BASE_URL = 'https://msr8.jprq.io/'
+BASE_URL = rq.get('https://msr8.github.io').text
+SYSTEM = pf.system()
 
 
 def slow_line_type(to_type):
@@ -18,9 +20,67 @@ def slow_line_type(to_type):
 		print(line)
 		t.sleep(0.2)
 
+def get_wifi():
+	profiles = []
+	wifis = {}
+	profiles_output = os.popen('netsh wlan show profiles').read()
+	# Goes thro the lines
+	for line in profiles_output.split('\n'):
+		# Checks if its like 'All User Profile : Redmi'
+		if not line.strip().startswith('All User Profile'):
+			continue
+		# Gets the profile name and adds it in our list
+		profile = line.split(':')[1].strip()
+		profiles.append(profile)
+	# Goes thro all the profiles
+	for profile in profiles:
+		pw_output = os.popen(f'netsh wlan show profile "{profile}" key=clear').read()
+		# Goes thro all the lines
+		for line in pw_output.split('\n'):
+			# Checks if it contains a password
+			if not line.strip().startswith('Key Content'):
+				continue
+			password = line.split(':')[1].strip()
+			wifis[profile] = password
+	# Checks which wifis didnt have a password
+	for profile in profiles:
+		if not profile in wifis.keys():
+			wifis[profile] = None
+	return wifis
 
-cls = lambda: os.system('cls' if pf.system()=='Windows' else 'clear')
+def get_network_information():
+	CY = Fore.CYAN
+	RES = Style.RESET_ALL
+	print(f'{Style.BRIGHT}{Fore.YELLOW}[+] Gathering network data{RES}\n')
+	ip = rq.get('https://api.ipify.org').text
+	data = rq.get(f'https://api.iplocation.net/?ip={ip}').json()
+	ip_v = data['ip_version']
+	country = data['country_name']
+	isp = data['isp']
+	myTable = PrettyTable(	[f'{CY}Attribute{RES}',		f'{CY}Value{RES}'	])
+	myTable.add_row(		[f'{CY}IP{RES}',			f'{ip} (IPv{ip_v})'	])
+	myTable.add_row(		[f'{CY}Location{RES}',		country				])
+	myTable.add_row(		[f'{CY}ISP{RES}',			isp					])
+	myTable.align[f'{CY}Attribute{RES}'] = 'l'
+	myTable.align[f'{CY}Value{RES}'] = 'r'
+	print(myTable)
+	print(f'\n{Style.BRIGHT}{Fore.YELLOW}\n[+] Gathering WiFi passwords{RES}\n')
+	
+	if SYSTEM == 'Windows':
+		wifis = get_wifi()
+		lis = [ [key,wifis[key]] for key in wifis ]
+		myTable = PrettyTable( [f'{CY}Name{RES}',f'{CY}Password{RES}'] )
+		myTable.add_rows(lis)
+		myTable.align[f'{CY}Name{RES}'] = 'l'
+		myTable.align[f'{CY}Name{RES}'] = 'r'
+		print(myTable)
+	else:
+		print('Not a windows distribution')
+
+
+cls = lambda: os.system('cls' if SYSTEM=='Windows' else 'clear')
 cls()	
+
 
 
 
@@ -42,18 +102,29 @@ while True:
 	print(f'{Style.BRIGHT}Welcome to Mark\'s services! What would you like to do?{Style.RESET_ALL}\n')
 	print(f'{Fore.CYAN}[1]{Fore.RESET} {Fore.YELLOW}Login{Fore.RESET}')
 	print(f'{Fore.CYAN}[2]{Fore.RESET} {Fore.YELLOW}Signup{Fore.RESET}')
-	print(f'{Fore.CYAN}[3]{Fore.RESET} {Fore.YELLOW}Exit{Fore.RESET}')
+	print(f'{Fore.CYAN}[3]{Fore.RESET} {Fore.YELLOW}Network Information {Style.BRIGHT}(FOR YOUR EYES ONLY!){Style.RESET_ALL}')
+	print(f'{Fore.CYAN}[4]{Fore.RESET} {Fore.YELLOW}Exit{Fore.RESET}')
 	signup_or_login = input('\n').lower()
-	if not signup_or_login in ['1','2','3','login','signup','exit']:
+	if not signup_or_login in ['1','2','3','4','login','signup','exit']:
 		cls()
 		print(f'{Fore.RED}{Style.BRIGHT}ERROR: Please select a valid option{Style.RESET_ALL}\n')
+		continue
+	if signup_or_login in ['3']:
+		cls()
+		get_network_information()
+		input(f'\n\n\n{Style.BRIGHT}Press enter to continue{Style.RESET_ALL}\n')
+		cls()
+		print(f'{Fore.MAGENTA}{LOGO}{Fore.RESET}')
 		continue
 	break
 
 cls()
 
-if signup_or_login in ['3','exit']:
+if signup_or_login in ['4','exit']:
 	sys.exit()
+
+
+
 
 
 
@@ -302,7 +373,6 @@ while True:
 				continue
 
 			print(f'{Fore.RED}{Style.BRIGHT}WARNING: Mails will be DELETED once you open them{Style.RESET_ALL}\n')
-			# myTable = PrettyTable( [f'{Style.BRIGHT}{x}{Style.RESET_ALL}' for x in ['ID','From','Header']] )
 			myTable = PrettyTable( [f'{Fore.CYAN}{x}{Style.RESET_ALL}' for x in ['ID','From','Header']] )
 
 			# Prints the data
@@ -354,6 +424,15 @@ while True:
 			input()
 			cls()
 			continue
+
+
+
+
+
+
+
+
+
 
 
 
