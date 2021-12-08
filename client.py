@@ -72,7 +72,7 @@ def get_network_information():
 		myTable = PrettyTable( [f'{CY}Name{RES}',f'{CY}Password{RES}'] )
 		myTable.add_rows(lis)
 		myTable.align[f'{CY}Name{RES}'] = 'l'
-		myTable.align[f'{CY}Name{RES}'] = 'r'
+		myTable.align[f'{CY}Password{RES}'] = 'r'
 		print(myTable)
 	else:
 		print('Not a windows distribution')
