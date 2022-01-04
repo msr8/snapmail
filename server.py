@@ -95,7 +95,6 @@ class Signup(Resource):
 			return {'username':username , 'password':password , 'status':'success'}
 		# In case of exception, tells what exception
 		except Exception as e:
-			print(e)
 			return {'error':str(e)}
 
 
