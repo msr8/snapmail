@@ -1,5 +1,5 @@
 prettytable
 colorama
-requests
+requests[socks]
 flask
 flask_restful
