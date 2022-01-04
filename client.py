@@ -20,8 +20,8 @@ args = parser.parse_args()
 TOR_ENABLED = args.tor
 # Gets TOR proxies if TOR is enabled
 PROXIES = {} if not TOR_ENABLED else {
-    'http':  'socks5://127.0.0.1:9050',
-    'https': 'socks5://127.0.0.1:9050'
+    'http':  'socks5h://127.0.0.1:9050',
+    'https': 'socks5h://127.0.0.1:9050'
     }
 
 BASE_URL = rq.get(f'https://msr8.github.io/snapmaildata/{"clearnet" if not TOR_ENABLED else "darknet"}', proxies=PROXIES).text.strip()
@@ -103,7 +103,7 @@ def get_network_information():
     else:
         print('Not a windows distribution')
 
-tor_text = lambda: f'{Style.BRIGHT}TOR:{Style.RESET_ALL} {f"{Fore.GREEN}Enabled" if TOR_ENABLED else f"{Fore.RED}Disabled"}{Style.RESET_ALL}'
+tor_text = lambda: f'{Style.BRIGHT}TOR:{Style.RESET_ALL} {f"{Fore.GREEN}Enabled" if TOR_ENABLED else f"{Fore.RED}Disabled"}{Style.RESET_ALL}  |  {BASE_URL.replace("https://","").replace("http://","").strip("/")}'
 
 cls = lambda: os.system('cls' if SYSTEM=='Windows' else 'clear')
 cls()    
@@ -194,7 +194,7 @@ elif signup_or_login in ['2','signup']:
             continue
         # Checks if username already exists
         try:
-            if bool( rq.get(BASE_URL+f'exists/{username}',proxies=PROXIES).json()['exists'] ):
+            if bool( rq.get(BASE_URL+f'exists/{username}/',proxies=PROXIES).json()['exists'] ):
                 print(f'{Fore.RED}{Style.BRIGHT}ERROR: Username not available{Style.RESET_ALL}\n')
                 continue
         # If the site is down or we dont have a connection
@@ -205,7 +205,7 @@ elif signup_or_login in ['2','signup']:
         # Send req
         try:
             body = {'username':username, 'password':password}
-            response = rq.post(BASE_URL+'signup', body, proxies=PROXIES).json()
+            response = rq.post(BASE_URL+'signup/', body, proxies=PROXIES).json()
             # Checks if there was an error
             if response.get('error'):
                 print(f'{Fore.RED}{Style.BRIGHT}SIGNUP ERROR: {response["error"]}{Style.RESET_ALL}\n')
@@ -246,7 +246,7 @@ elif signup_or_login in ['1','login']:
         # Sends the query
         try:
             body = {'username':username, 'password':password}
-            response = rq.post(BASE_URL+'login', body, proxies=PROXIES).json()
+            response = rq.post(BASE_URL+'login/', body, proxies=PROXIES).json()
             # Checks if there was an error
             if response.get('error'):
                 print(f'{Fore.RED}{Style.BRIGHT}LOGIN ERROR: {response["error"]}{Style.RESET_ALL}\n')
@@ -322,7 +322,7 @@ while True:
 
         # Checks if destination exists
         try:
-            if not bool( rq.get(BASE_URL+f'exists/{destination}',proxies=PROXIES).json()['exists'] ):
+            if not bool( rq.get(BASE_URL+f'exists/{destination}/',proxies=PROXIES).json()['exists'] ):
                 cls()
                 print(f'{Fore.RED}{Style.BRIGHT}ERROR: @{destination} does NOT exist. Please recheck your spelling{Style.RESET_ALL}\n')
                 continue
@@ -343,7 +343,7 @@ while True:
             body['destination'] = destination
             body['header'] = mail_head
             body['body'] = mail_body
-            response = rq.post(BASE_URL+'message', body, proxies=PROXIES).json()
+            response = rq.post(BASE_URL+'message/', body, proxies=PROXIES).json()
 
             # Checks if there was an error
             if response.get('error'):
@@ -383,7 +383,7 @@ while True:
             # Asks the server for our inbox
             try:
                 body = AUTH.copy()
-                msges = rq.post(BASE_URL+'inbox', body, proxies=PROXIES).json()            
+                msges = rq.post(BASE_URL+'inbox/', body, proxies=PROXIES).json()            
                 # Checks if there was an error
                 if msges.get('error'):
                     print(f'{Fore.RED}{Style.BRIGHT}SENDING MESSAGE ERROR: {msges["error"]}{Style.RESET_ALL}\n')
@@ -433,7 +433,7 @@ while True:
             try:
                 body = AUTH.copy()
                 body['message_id'] = inbox_chc
-                msg = rq.post(BASE_URL+'read', body, proxies=PROXIES).json()            
+                msg = rq.post(BASE_URL+'read/', body, proxies=PROXIES).json()            
                 # Checks if there was an error
                 if msges.get('error'):
                     print(f'{Fore.RED}{Style.BRIGHT}SENDING MESSAGE ERROR: {msges["error"]}{Style.RESET_ALL}\n')

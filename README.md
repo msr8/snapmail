@@ -29,11 +29,11 @@ python client.py
 
 # TOR
 
-**NOTE: This section is really techinical. If you aren't familliar with TOR protocol, I would highly reccomend you skip this section**
+**NOTE: This section is highly technical. If you aren't familliar with the onion routing protocol, I would recommend you skip this section**
 
 <br>
 
-If you want, you can route all the traffic through the TOR network to get even more privacy and security. However, this will slow down the program and it requires the tor command line utility to be running
+If you want, you can route all the traffic through the TOR network and send requests to our .onion mirror to get even more privacy and security. However, this will slow down the program and it requires the tor command line utility to be running
 
 <br>
 
@@ -50,20 +50,13 @@ $ python client.py -t
 
 You can also use `--tor` instead of `-t`
 
-If everything goes good, you should see `TOR: Enabled` below the logo. If you dont see it but the home logo is there, that means that you didnt give the tor argument in the CLI correctly. If you get the following error-
+If everything goes good, you should see `TOR: Enabled` along with the onion address below the logo. If you dont see it but the home logo is there, that means that you didnt give the tor argument in the CLI correctly. If you get the following error-
 
 ```
 Failed to establish a new connection: [Errno 61] Connection refused
 ```
 
-It means that TOR is not running or is not configured to run at port 9050
-
-<br>
-
-## Onion Mirror
-
-I am currently working on an onion mirror for the server so that when using TOR with snapmail, you can be even more private and secure
-
+It means that TOR is not running and/or is not configured to run at port 9050
 
 
 

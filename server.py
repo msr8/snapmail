@@ -1,5 +1,5 @@
+from flask import Flask, request, redirect
 from flask_restful import Api, Resource
-from flask import Flask, request
 import sqlite3
 import json
 import os
@@ -8,6 +8,10 @@ DATA = os.path.join( os.path.dirname(__file__) , 'DATA' )
 INBOX = os.path.join( DATA , 'INBOX' )
 USERNAMES = os.path.join( DATA , 'usernames.db' )
 MSG_COUNT = os.path.join( DATA , 'messagecount.txt' )
+HOME_LIST = {
+    'status': 'online',
+    'github': 'https://github.com/msr8/snapmail'
+}
 
 
 if not os.path.exists(DATA):
@@ -22,8 +26,7 @@ def init_database():
         cmd = 'CREATE TABLE usernames ( username VARCHAR(20) PRIMARY KEY, password VARCHAR(20) )'
         crsr.execute(cmd)
         db_connection.close()
-    except sqlite3.OperationalError:
-        pass
+    except sqlite3.OperationalError:    pass
 
 def get_msg_count():
     with open(MSG_COUNT) as f:
@@ -59,11 +62,12 @@ init_database()
 app = Flask(__name__)
 api = Api(app)
 
-signup_args = []
 
-class HelloWorld(Resource):
-    def get(self, name):
-        return {'text':'Hello' , 'param':name}
+
+@app.route('/')
+def test():
+    return redirect('https://github.com/msr8/snapmail')
+
 
 class Exists(Resource):
     def get(self, username):
@@ -224,14 +228,13 @@ class Read(Resource):
 
 
 
-# Adds the link and make it accesible
-api.add_resource(HelloWorld, '/hello/<string:name>')
-api.add_resource(Exists, '/exists/<string:username>')
-api.add_resource(Signup, '/signup')
-api.add_resource(Login, '/login')
-api.add_resource(Message, '/message')
-api.add_resource(Inbox, '/inbox')
-api.add_resource(Read, '/read')
+# Adds the links and make it accesible
+api.add_resource(Exists, '/exists/<string:username>/')
+api.add_resource(Signup, '/signup/')
+api.add_resource(Login, '/login/')
+api.add_resource(Message, '/message/')
+api.add_resource(Inbox, '/inbox/')
+api.add_resource(Read, '/read/')
 
 
 
