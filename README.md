@@ -1,5 +1,7 @@
 ![Logo](ass/main.png)
 
+Privacy, security, and anonymity done right
+
 <br>
 
 # Introduction
