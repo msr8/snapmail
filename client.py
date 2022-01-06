@@ -24,7 +24,7 @@ PROXIES = {} if not TOR_ENABLED else {
     'https': 'socks5h://127.0.0.1:9050'
     }
 
-BASE_URL = rq.get(f'https://msr8.github.io/snapmaildata/{"clearnet" if not TOR_ENABLED else "darknet"}', proxies=PROXIES).text.strip()
+BASE_URL = rq.get(f'https://msr8.github.io/snapmail/{"clearnet" if not TOR_ENABLED else "darknet"}', proxies=PROXIES).text.strip()
 SYSTEM = pf.system()
 
 def slow_line_type(to_type):
@@ -97,8 +97,8 @@ def get_network_information():
         lis = [ [key,wifis[key]] for key in wifis ]
         myTable = PrettyTable( [f'{CY}Name{RES}',f'{CY}Password{RES}'] )
         myTable.add_rows(lis)
-        myTable.align[f'{CY}Attribute{RES}'] = 'm'
-        myTable.align[f'{CY}Password{RES}'] = 'm'
+        myTable.align[f'{CY}Attribute{RES}'] = 'l'
+        myTable.align[f'{CY}Password{RES}'] = 'l'
         print(myTable)
     else:
         print('Not a windows distribution')
