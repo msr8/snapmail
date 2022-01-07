@@ -126,7 +126,7 @@ cls()
 slow_line_type(f'{Fore.MAGENTA}{LOGO}{Fore.RESET}')
 print(tor_text())
 while True:
-    print(f'{Style.BRIGHT}\nWelcome to Mark\'s services! What would you like to do?{Style.RESET_ALL}\n')
+    print(f'{Style.BRIGHT}\nWelcome to Snapmail! What would you like to do?{Style.RESET_ALL}\n')
     print(f'{Fore.CYAN}[1]{Fore.RESET} {Fore.YELLOW}Login{Fore.RESET}')
     print(f'{Fore.CYAN}[2]{Fore.RESET} {Fore.YELLOW}Signup{Fore.RESET}')
     print(f'{Fore.CYAN}[3]{Fore.RESET} {Fore.YELLOW}Network Information {Style.BRIGHT}(FOR YOUR EYES ONLY!){Style.RESET_ALL}')
