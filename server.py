@@ -1,5 +1,6 @@
 from flask import Flask, request, redirect
 from flask_restful import Api, Resource
+from colorama import init, Fore, Style
 import sqlite3
 import json
 import os
@@ -26,7 +27,9 @@ def init_database():
         cmd = 'CREATE TABLE usernames ( username VARCHAR(20) PRIMARY KEY, password VARCHAR(20) )'
         crsr.execute(cmd)
         db_connection.close()
-    except sqlite3.OperationalError:    pass
+    except sqlite3.OperationalError:       pass
+    if not os.path.exists(MSG_COUNT):
+        with open(MSG_COUNT, 'w') as f:    pass
 
 def get_msg_count():
     with open(MSG_COUNT) as f:
@@ -46,6 +49,8 @@ def check_pass(username, password):
     # Checks if username and password is correct (to counter exploits)
     ret = True if data[0][1] == password else False
     return ret
+
+cls = lambda: os.system('cls' if os.name == 'nt' else 'clear')
 
 
 
@@ -239,6 +244,12 @@ api.add_resource(Read, '/read/')
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    cls()
+    print(f'{BOL}{GR}[TURNING ON SERVER]{RES}\n')
+
+    from waitress import serve
+    serve(app, port=5000, host='0.0.0.0')
+
+    # app.run(debug=False)
 
 

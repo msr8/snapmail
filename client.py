@@ -1,4 +1,4 @@
-from colorama import init,Fore, Style
+from colorama import init, Fore, Style
 from prettytable import PrettyTable
 from stuff import LOGO, HOME_LOGO
 from getpass import getpass
