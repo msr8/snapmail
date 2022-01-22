@@ -9,6 +9,9 @@ DATA = os.path.join( os.path.dirname(__file__) , 'DATA' )
 INBOX = os.path.join( DATA , 'INBOX' )
 USERNAMES = os.path.join( DATA , 'usernames.db' )
 MSG_COUNT = os.path.join( DATA , 'messagecount.txt' )
+RES = Style.RESET_ALL
+BOL = Style.BRIGHT
+GR = Fore.GREEN
 HOME_LIST = {
     'status': 'online',
     'github': 'https://github.com/msr8/snapmail'
