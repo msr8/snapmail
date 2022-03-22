@@ -25,6 +25,7 @@ PROXIES = {} if not TOR_ENABLED else {
     }
 
 BASE_URL = rq.get(f'https://msr8.github.io/snapmail/{"clearnet" if not TOR_ENABLED else "darknet"}', proxies=PROXIES).text.strip()
+# BASE_URL = 'http://127.0.0.1:5000/'
 SYSTEM = pf.system()
 
 def slow_line_type(to_type):

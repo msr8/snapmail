@@ -1,9 +1,11 @@
 from flask import Flask, request, redirect
 from flask_restful import Api, Resource
 from colorama import init, Fore, Style
+from prettytable import PrettyTable
 import sqlite3
 import json
 import os
+init()
 
 DATA = os.path.join( os.path.dirname(__file__) , 'DATA' )
 INBOX = os.path.join( DATA , 'INBOX' )
@@ -47,8 +49,7 @@ def check_pass(username, password):
     data = crsr.fetchall()
     conn.close()
     # Checks if the data is of any length
-    if not len(data):
-        return False
+    if not len(data):    return False
     # Checks if username and password is correct (to counter exploits)
     ret = True if data[0][1] == password else False
     return ret
@@ -103,6 +104,10 @@ class Signup(Resource):
             crsr.execute(cmd)
             conn.commit()
             conn.close()
+            # Logs it
+            table = PrettyTable(['Username', 'Password'])
+            table.add_row([username, password])
+            print(table)
             # Tells that it was a success
             return {'username':username , 'password':password , 'status':'success'}
         # In case of exception, tells what exception
