@@ -22,7 +22,7 @@ You should have preinstalled python, pip, and git. You can install python and pi
 
 To install the program, enter the following commands in your command prompt/terminal:
 
-```
+```bash
 git clone https://github.com/msr8/snapmail
 cd snapmail
 pip install -r requirements.txt
